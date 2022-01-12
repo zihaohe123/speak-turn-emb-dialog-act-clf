@@ -21,7 +21,7 @@ The hyperparameters can be set in the three scripts and should be fairly underst
 2. Put your train/val/test data as <em>train.csv</em>, <em>val.csv</em>, and <em>test.csv</em> under this folder
    1. For any of the three files, each row represents an utterance, and it must have the following columns:
       1. conv_id. the id of this conversation
-      2. speaker_id. the id of the speaker. if not available, just put all zeros.
+      2. speaker_id. the id of the speaker. the speaker id should be binary and indicates the turn of the speaker in this conversation. for dyadic conversations the original speaker ids should already be binary. in the case of multi-party conversations and speaker ids are non-binary, please refer to Section 3.3 of our paper on how to make the labels binary. if speaker ids are not available, just put all zeros. 
       3. text. the text of the utterance.
       4. act. the dialogue act label.
       5. topic. the topic label. if not available, just put all zeros.
