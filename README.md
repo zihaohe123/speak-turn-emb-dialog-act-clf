@@ -1,12 +1,12 @@
-## Speaker Turn Modeling for Dialogue Act Classification
+# Speaker Turn Modeling for Dialogue Act Classification
 This repo implements this [paper](https://aclanthology.org/2021.findings-emnlp.185/).
 
-# Installation
+## Installation
 1. unzip data.zip
 3. Install [Pytorch](https://pytorch.org/get-started/locally/) and [Huggingface Transformers](https://huggingface.co/docs/transformers/installation).
 
 
-# Usage
+## Usage
 To train the model on different datasets, simply run the corresponding file
 ```angular2html
 python run_swda.py
@@ -17,7 +17,7 @@ python run_dyda.py
 The hyperparameters can be set in the three scripts and should be fairly understandable.
 
 
-# Citation
+## Citation
 ```angular2html
 @inproceedings{he2021speaker,
   title={Speaker Turn Modeling for Dialogue Act Classification},
