@@ -45,16 +45,16 @@ if __name__ == '__main__':
     if n_gpu != 2:
         file_name = file_name[:-4] + f'_ngpu={n_gpu}.txt'
 
-    bash_file = ''
-    with open(f'run_{corpus}.sh') as f:
-        for line in f:
-            str_line = list(line)
-            if 'gpu' in line:
-                pos = line.index('=')
-                str_line[pos+1: pos+2] = str(n_gpu)
-            bash_file += ''.join(str_line)
-    with open(f'run_{corpus}.sh', 'w') as f:
-        f.write(bash_file)
+    # bash_file = ''
+    # with open(f'run_{corpus}.sh') as f:
+    #     for line in f:
+    #         str_line = list(line)
+    #         if 'gpu' in line:
+    #             pos = line.index('=')
+    #             str_line[pos+1: pos+2] = str(n_gpu)
+    #         bash_file += ''.join(str_line)
+    # with open(f'run_{corpus}.sh', 'w') as f:
+    #     f.write(bash_file)
 
     command = f"python -u engine.py --corpus={corpus} --gpu={gpu} --batch_size={batch_size} " \
               f"--batch_size_val={batch_size_val} --epochs={epochs} " \
