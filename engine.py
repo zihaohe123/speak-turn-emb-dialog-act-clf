@@ -88,8 +88,8 @@ class Engine:
             if epoch - best_epoch >= 10:
                 break
 
-        # print('Saving the best checkpoint....')
-        # torch.save(self.model.state_dict(), f"ckp/model.pt")
+        print('Saving the best checkpoint....')
+        torch.save(best_state_dict, f"ckp/model.pt")
         self.model.load_state_dict(best_state_dict)
         acc = self.eval(False)
         print(f'Test Acc: {acc:.3f}')
@@ -106,19 +106,20 @@ class Engine:
             speaker_ids = batch['speaker_ids'].to(self.device)
             topic_labels = batch['topic_labels'].to(self.device)
             outputs = self.model(input_ids, attention_mask, chunk_lens, speaker_ids,
-                                                                topic_labels)
+                                 topic_labels)
             labels = labels.reshape(-1)
             loss_act = self.criterion(outputs, labels)
             loss = loss_act
             loss.backward()
             self.optimizer.step()
-            interval = max(len(self.train_loader)//20, 1)
+            interval = max(len(self.train_loader) // 20, 1)
             if i % interval == 0 or i == len(self.train_loader) - 1:
-                print(f'Batch: {i + 1}/{len(self.train_loader)}\tloss: {loss.item():.3f}\tloss_act:{loss_act.item():.3f}')
+                print(
+                    f'Batch: {i + 1}/{len(self.train_loader)}\tloss: {loss.item():.3f}\tloss_act:{loss_act.item():.3f}')
             epoch_loss += loss.item()
         return epoch_loss / len(self.train_loader)
 
-    def eval(self, val=True):
+    def eval(self, val=True, inference=False):
         self.model.eval()
         y_pred = []
         y_true = []
@@ -139,16 +140,32 @@ class Engine:
         y_pred = np.concatenate(y_pred, axis=0)
         y_true = np.concatenate(y_true, axis=0)
 
+        if inference:
+            import pickle
+            pickle.dump(y_pred.tolist(), open('preds_on_new.pkl', 'wb'))
+
         mask = y_true != -1
         acc = accuracy_score(y_true[mask], y_pred[mask])
         return acc
 
+    def inference(self):
+        ## using the trained model to inference on a new unseen dataset
+
+        # load the saved checkpoint
+        self.model.load_state_dict(torch.load('ckp/model.pt'))
+
+        # make predictions
+        self.eval(val=False, inference=True)
+
+
 
 if __name__ == '__main__':
     import argparse
+
     parser = argparse.ArgumentParser()
-    parser.add_argument('--corpus', type=str, choices=('swda', 'mrda', 'dyda'), default='swda',
-                        help='the dataset to use')
+    parser.add_argument('--corpus', type=str, default='swda', help='the dataset to use')
+    parser.add_argument('--mode', type=str, choices=('train', 'inference'), default='train',
+                        help='train the model or use the trained model to inference')
     parser.add_argument('--nclass', type=int, default=43, help='num of dialog act classes in the dataset')
     parser.add_argument('--batch_size', type=int, default=8, help='batch size of training')
     parser.add_argument('--batch_size_val', type=int, default=32, help='batch size of evaluation')
@@ -171,4 +188,7 @@ if __name__ == '__main__':
 
     print(args)
     engine = Engine(args)
-    engine.train()
+    if args.mode == 'train':
+        engine.train()
+    else:
+        engine.inference()

@@ -6,6 +6,7 @@ This repo implements this [paper](https://aclanthology.org/2021.findings-emnlp.1
 3. Install [Pytorch](https://pytorch.org/get-started/locally/) and [Huggingface Transformers](https://huggingface.co/docs/transformers/installation).
 
 
+
 ## Usage
 To train the model on different datasets, simply run the corresponding file
 ```angular2html
@@ -26,13 +27,25 @@ The hyperparameters can be set in the three scripts and should be fairly underst
       4. act. the dialogue act label.
       5. topic. the topic label. if not available, just put all zeros.
 3. Create a script as run_{dataset_name}.py. You can reuse most of the parameter settings in run_swda/mrda/dyda.py. If the conversations are very long (have a lot of utterances), consider slicing it into smaller chunks by specifying <em>chunk_size</em> to a non-zero value. 
-   1. Set <em>copurs</em> as your {dataset_name}. 
-   2. Set <em>nclass</em> as the number of dialogue act classes in your dataset.
+   1. Set <em>copurs</em> to your {dataset_name}. 
+   2. Set <em>nclass</em> to the number of dialogue act classes in your dataset.
 4. Run the script
 ```angular2html
 python run_{dataset_name}.py
 ```
 5. In order to obtain the best performance, you may need to try different <em>batch_size</em>, <em>chunk_size</em> (32, 64, 128, 192, 256, 512 and etc.), <em>lr</em> (1e-4, 5e-5, 1e-5 and etc.), and <em>nfinetune</em> (1, 2).
+
+
+
+## Test the trained model to a new dataset
+1. Decide the pretraining dataset <em>pre_corpus</em> in {SWDA, MRDA, DyDA}. Choose the one that is most similar to your own datset.
+2. Train the model on the pretraining dataset using <em>run_pre_corpus.py</em>.
+3. Prepare your own dataset as described in Step 1 & 2 in "Train the model on other datasets". Encode the dialogue act labels of your own dataset using the mapping shown in the top comments of <em>dataset.py</em>. If you don't have training data and validation data, just put train.csv and val.csv as two empty dataframes, with the required columns (make two empty DataFrames using pandas and save with those column names).
+4. Make a copy of <em>run_pre_corpus.py</em> and change the following parameters.
+   1. Set <em>corpus</em> to your {dataset_name}. 
+   2. Set <em>mode</em> to <em>inference</em>.
+5. Run the new script.
+6. The predictions of the model (a list of predicted labels) will be saved in <em>preds_on_new.pkl</em>.
 
 
 ## Citation

@@ -8,6 +8,7 @@ import os
 
 if __name__ == '__main__':
     corpus = 'swda'
+    mode = ['train', 'inference'][0]
     batch_size = 2
     batch_size_val = 2 # don't change this number
     emb_batch = 0
@@ -59,7 +60,7 @@ if __name__ == '__main__':
     # with open(f'run_{corpus}.sh', 'w') as f:
     #     f.write(bash_file)
 
-    command = f"python -u engine.py --corpus={corpus} --gpu={gpu} --batch_size={batch_size} " \
+    command = f"python -u engine.py --corpus={corpus} --mode={mode} --gpu={gpu} --batch_size={batch_size} " \
               f"--batch_size_val={batch_size_val} --epochs={epochs} " \
               f"--lr={lr} --nlayer={nlayer} --chunk_size={chunk_size} --dropout={dropout} " \
               f"--nfinetune={nfinetune} --speaker_info={speaker_info} " \
