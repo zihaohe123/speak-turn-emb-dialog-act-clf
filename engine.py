@@ -153,11 +153,11 @@ class Engine:
         ## using the trained model to inference on a new unseen dataset
 
         # load the saved checkpoint
+        # change the model name to whatever the checkpoint is named
         self.model.load_state_dict(torch.load('ckp/model.pt'))
 
         # make predictions
         self.eval(val=False, inference=True)
-
 
 
 if __name__ == '__main__':
