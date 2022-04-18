@@ -22,11 +22,11 @@ class Engine:
                                    phase='train',
                                    batch_size=args.batch_size,
                                    chunk_size=args.chunk_size,
-                                   shuffle=True)
+                                   shuffle=True) if args.mode != 'inference' else None
         val_loader = data_loader(corpus=args.corpus,
                                  phase='val',
                                  batch_size=args.batch_size_val,
-                                 chunk_size=args.chunk_size)
+                                 chunk_size=args.chunk_size) if args.mode != 'inference' else None
         test_loader = data_loader(corpus=args.corpus,
                                   phase='test',
                                   batch_size=args.batch_size_val,

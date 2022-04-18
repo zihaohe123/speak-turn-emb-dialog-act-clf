@@ -38,14 +38,14 @@ python run_{dataset_name}.py
 
 
 ## Test the trained model to a new dataset
-1. Decide the pretraining dataset <em>pre_corpus</em> in {SWDA, MRDA, DyDA}. Choose the one that is most similar to your own datset.
-2. Train the model on the pretraining dataset using <em>run_pre_corpus.py</em>.
-3. Prepare your own dataset as described in Step 1 & 2 in "Train the model on other datasets". Encode the dialogue act labels of your own dataset using the mapping shown in the top comments of <em>dataset.py</em>. If you don't have training data and validation data, just put train.csv and val.csv as two empty dataframes, with the required columns (make two empty DataFrames using pandas and save with those column names).
+1. Decide the pretraining dataset <em>pre_corpus</em> in {SWDA, MRDA, DyDA}. Choose the one that is most similar to your own dataset.
+2. Train the model on the pretraining dataset using <em>run_pre_corpus.py</em>. Rename the saved checkpoint to <em>model.pt</em>.
+3. Prepare your own dataset as described in Step 1 & 2 in "Train the model on other datasets". Encode the dialogue act labels of your own dataset using the mapping shown in the top comments of <em>dataset.py</em>. If you don't have training data and validation data, just prepare your test.csv file.
 4. Make a copy of <em>run_pre_corpus.py</em> and change the following parameters.
    1. Set <em>corpus</em> to your {dataset_name}. 
    2. Set <em>mode</em> to <em>inference</em>.
 5. Run the new script.
-6. The predictions of the model (a list of predicted labels) will be saved in <em>preds_on_new.pkl</em>.
+6. The predictions of the model (a list of predicted labels of all the utterances) will be saved in <em>preds_on_new.pkl</em>.
 
 ## Some tips
 1. The code will save the processed data to pickle files under processed_data in order to prevent do the processing every time. If you made any changes to the processing in datasets.py, please delete the cached pickle files before you run the code.
