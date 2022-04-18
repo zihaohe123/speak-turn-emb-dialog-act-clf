@@ -89,7 +89,7 @@ class Engine:
                 break
 
         print('Saving the best checkpoint....')
-        torch.save(best_state_dict, f"ckp/model.pt")
+        torch.save(best_state_dict, f"ckp/model_{self.args.corpus}.pt")
         self.model.load_state_dict(best_state_dict)
         acc = self.eval(False)
         print(f'Test Acc: {acc:.3f}')
@@ -140,12 +140,13 @@ class Engine:
         y_pred = np.concatenate(y_pred, axis=0)
         y_true = np.concatenate(y_true, axis=0)
 
-        if inference:
-            import pickle
-            pickle.dump(y_pred.tolist(), open('preds_on_new.pkl', 'wb'))
-
         mask = y_true != -1
         acc = accuracy_score(y_true[mask], y_pred[mask])
+
+        if inference:
+            import pickle
+            pickle.dump(y_pred[mask].tolist(), open('preds_on_new.pkl', 'wb'))
+
         return acc
 
     def inference(self):
